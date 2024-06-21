@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using api_javascript_connection.Models;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Diagnostics;
 using web_javascript_connection.Models;
 
@@ -6,6 +8,7 @@ namespace web_javascript_connection.Controllers
 {
     public class HomeController : Controller
     {
+        private string _url = "http://localhost:5166/api/Suppliers";
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger)
@@ -13,20 +16,38 @@ namespace web_javascript_connection.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            using (var client = new HttpClient())
+            {
+                try
+                {
+                    using (var response = await client.GetAsync(_url))
+                    {
+                        if (response.IsSuccessStatusCode)
+                        {
+                            var data = await response.Content.ReadAsStringAsync();
+                            var dataObj = JsonConvert.DeserializeObject<List<Supplier>>(data);
+                            if (dataObj != null)
+                            {
+                                return View(dataObj);
+                            }
+                            else
+                            {
+                                return RedirectToAction("Index", new { Message = "Data Error" });
+                            }
+                        }
+                        else
+                        {
+                            return RedirectToAction("Index", new { Message = "Response failed" });
+                        }
+                    }
+                }
+                catch (HttpRequestException e)
+                {
+                    return RedirectToAction("Index", new { Message = "Error connecting to service." + e });
+                }
+            }
         }
     }
 }

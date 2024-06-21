@@ -4,9 +4,19 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - web_javascript_connection</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/web_javascript_connection.styles.css" asp-append-version="true" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /> *@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <link rel="stylesheet" href="~/Admin/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="~/Admin/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="~/Admin/css/feathericon.min.css">
+
+    <link rel="stylesheet" href="~/Admin/plugins/datatables/datatables.min.css">
+
+    <link rel="stylesheet" href="~/Admin/css/style.css">
 </head>
 <body>
     <header>
@@ -23,7 +33,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Supplier" asp-action="Index">Supplier</a>
                         </li>
                     </ul>
                 </div>
@@ -41,9 +51,19 @@
             &copy; 2024 - web_javascript_connection - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    @* <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script> *@
+
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="~/Admin/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/Admin/js/feather.min.js"></script>
+
+    <script src="~/Admin/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="~/Admin/js/script.js"></script>
+
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

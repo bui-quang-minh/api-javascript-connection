@@ -1,8 +1,45 @@
-﻿@{
+﻿@using api_javascript_connection.Models
+@{
     ViewData["Title"] = "Home Page";
-}
+}\
+@model List<Supplier>
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+<table id="mytable" class="datatable table table-hover table-center mb-0">
+    <thead>
+        <tr>
+            <th width="100" onclick="sortTable(0)">SupplierID</th>
+            <th width="300" onclick="sortTable(1)" id="sort">CompanyName</th>
+            <th width="300" onclick="sortTable(2)" class="text-center">ContactName</th>
+            <th width="300" onclick="sortTable(3)" class="text-center">Address</th>
+            <th width="300" onclick="sortTable(4)" class="text-center">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var a in Model)
+        {
+            <tr>
+                <td>
+                    @a.SupplierId
+                </td>
+                <td>
+                    <span class="limitedText">@a.CompanyName</span>
+                </td>
+                <td class="">
+                    <span class="limitedText">@a.ContactName</span>
+                </td>
+                <td class="">
+                    <span class="limitedText">@a.Address</span>
+                </td>
+                <td class="text-end">
+                    <div class="actions">
+                        
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
