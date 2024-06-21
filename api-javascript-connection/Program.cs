@@ -18,10 +18,10 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<NORTHWINDContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("MyConStr")));
-builder.Services.AddCors();
 builder.Services.AddControllersWithViews().AddXmlDataContractSerializerFormatters();
+//builder.Services.AddCors();
 var app = builder.Build();
-app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+//app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

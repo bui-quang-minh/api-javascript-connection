@@ -33,36 +33,3 @@
         </div>
     </div>
 </div>
-<script>
-    
-    function addData() {
-        //var id = document.getElementById('idEdit').value;
-        var comp = document.getElementById('comp').value;
-        var contact = document.getElementById('contact').value;
-        var address = document.getElementById('address').value;
-        data = new FormData();
-        //console.log(id);
-        console.log(comp);
-console.log(contact);
-console.log(address);
-        console.log("addButton");
-        //data.append('SupplierId', id);
-        data.append('CompanyName', comp);
-        data.append('ContactName', contact);
-        data.append('Address', address);
-        console.log(data);
-        $.ajax({
-            url: 'http://localhost:5166/api/Suppliers',
-            type: 'POST',
-            data: data,
-            processData: false,
-            contentType: false,
-            success: function (result) {
-                location.href = "http://localhost:5151/Supplier";
-            },
-            error: function (error) {
-                $('#apiResponse').html('<div class="alert alert-danger">Error calling API</div>');
-            }
-        });
-    }
-</script>
