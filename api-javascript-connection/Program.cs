@@ -1,10 +1,11 @@
 using api_javascript_connection.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
-
+using Newtonsoft.Json;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
 
 
 builder.Services.AddControllers()
@@ -17,8 +18,10 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<NORTHWINDContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("MyConStr")));
+builder.Services.AddCors();
+builder.Services.AddControllersWithViews().AddXmlDataContractSerializerFormatters();
 var app = builder.Build();
-
+app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

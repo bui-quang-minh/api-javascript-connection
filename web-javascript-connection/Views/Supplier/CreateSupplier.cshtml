@@ -1,0 +1,68 @@
+﻿<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <button type="submit" class="bv-hidden-submit" style="display: none; width: 0px; height: 0px;"></button>
+            <div class="col-md-12">
+                <div class="form-group mb-3">
+                    <label>SupplierId</label>
+                    <input class="form-control" name="id" id="idEdit" type="text" >
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group mb-3">
+                    <label>CompanyName</label>
+                    <input class="form-control" name="comp" id="comp" type="text">
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group mb-3">
+                    <label>Contact Name</label>
+                    <input class="form-control" name="contact" id="contact" type="text">
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group mb-3">
+                    <label>Address</label>
+                    <input class="form-control" name="address" id="address" type="text">
+                </div>
+            </div>
+            <div>
+                <button onclick="addData()" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    
+    function addData() {
+        //var id = document.getElementById('idEdit').value;
+        var comp = document.getElementById('comp').value;
+        var contact = document.getElementById('contact').value;
+        var address = document.getElementById('address').value;
+        data = new FormData();
+        //console.log(id);
+        console.log(comp);
+console.log(contact);
+console.log(address);
+        console.log("addButton");
+        //data.append('SupplierId', id);
+        data.append('CompanyName', comp);
+        data.append('ContactName', contact);
+        data.append('Address', address);
+        console.log(data);
+        $.ajax({
+            url: 'http://localhost:5166/api/Suppliers',
+            type: 'POST',
+            data: data,
+            processData: false,
+            contentType: false,
+            success: function (result) {
+                location.href = "http://localhost:5151/Supplier";
+            },
+            error: function (error) {
+                $('#apiResponse').html('<div class="alert alert-danger">Error calling API</div>');
+            }
+        });
+    }
+</script>

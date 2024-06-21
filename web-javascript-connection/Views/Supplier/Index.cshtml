@@ -1,0 +1,225 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@{
+    ViewBag.Title = "Home Page";
+}
+<button class="btn btn-primary" id="createButton"><a href="/Supplier/CreateSupplier">Create</a></button>
+<div class="text-center">
+    <h1 class="display-4">Supplier</h1>
+    <div class="mt-4">
+        <table id="mytable" class="table table-hover table-center mb-0">
+            <thead>
+                <tr>
+                    <th width="100" onclick="sortTable(0)">SupplierID</th>
+                    <th width="300" onclick="sortTable(1)" id="sort">CompanyName</th>
+                    <th width="300" onclick="sortTable(2)" class="text-center">ContactName</th>
+                    <th width="300" onclick="sortTable(3)" class="text-center">Address</th>
+                    <th width="300" onclick="sortTable(4)" class="text-center">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <div id="apiResponse" class="mt-4"></div>
+</div>
+<div class="modal fade" id="delete_modal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+
+            <div class="modal-body">
+
+                <div class="form-content p-2">
+                    <h4 class="modal-title">Delete</h4>
+                    <p class="mb-4">Are you sure want to delete?</p>
+                    <button onclick="deleteData()" id="MyLink" class="btn btn-primary">Delete </button>
+                    <input type="hidden" value="" id="id" name="id" />
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="edit_modal" aria-hidden="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" style="width: 900px ; max-width:100%" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="form-content p-2">
+                    <div class="modal-header border-0">
+                        <h4 class="modal-title">Edit</h4>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <button type="submit" class="bv-hidden-submit" style="display: none; width: 0px; height: 0px;"></button>
+                                <div class="col-md-12">
+                                    <div class="form-group mb-3">
+                                        <label>SupplierId</label>
+                                        <input class="form-control" name="id" id="idEdit" type="text" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group mb-3">
+                                        <label>CompanyName</label>
+                                        <input class="form-control" name="comp" id="comp" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group mb-3">
+                                        <label>Contact Name</label>
+                                        <input class="form-control" name="contact" id="contact" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group mb-3">
+                                        <label>Address</label>
+                                        <input class="form-control" name="address" id="address" type="text">
+                                    </div>
+                                </div>
+                                <div>
+                                    <button onclick="addData()" class="btn btn-primary">Save</button>
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    function loadEdit() {
+        var modal = document.getElementById('edit_modal');
+        var links = document.querySelectorAll('[data-bs-target="#edit_modal"]');
+        console.log(links);
+        // Add event listener for when any of the links is clicked
+        links.forEach(function (link) {
+            link.addEventListener('click', function () {
+                var id = link.dataset.id;
+                var comp = link.dataset.comp;
+                var contact = link.dataset.contact;
+                var address = link.dataset.address;
+                document.getElementById('idEdit').value = id;
+                document.getElementById('comp').value = comp;
+                document.getElementById('contact').value = contact;
+                document.getElementById('address').value = address;
+            });
+        });
+    };
+    function addData() {
+        var id = document.getElementById('idEdit').value;
+        var comp = document.getElementById('comp').value;
+        var contact = document.getElementById('contact').value;
+        var address = document.getElementById('address').value;
+        data = new FormData();
+        console.log("addButton");
+        data.append('SupplierId', id);
+        data.append('CompanyName', comp);
+        data.append('ContactName', contact);
+        data.append('Address', address);
+        console.log(data);
+        $.ajax({
+            url: 'http://localhost:5166/api/Suppliers/Edit/',
+            type: 'PUT',
+            data: data,
+            processData: false,
+            contentType: false,
+            success: function (result) {
+                location.href = "http://localhost:5151/Supplier";
+            },
+            error: function (error) {
+                $('#apiResponse').html('<div class="alert alert-danger">Error calling API</div>');
+            }
+        });
+    }
+</script>
+<script>
+    function deleteData() {
+        var id = document.getElementById('id').value;
+        console.log("DeleteButton");
+        $.ajax({
+            url: 'http://localhost:5166/api/Suppliers/Delete/'+id,
+            type: 'DELETE',
+            processData: false,
+            contentType: false,
+            success: function (result) {
+                location.href = "http://localhost:5151/Supplier";
+            },
+            error: function (error) {
+                var errorMessage = error.responseJSON && error.responseJSON.message
+                    ? error.responseJSON.message
+                    : 'Error calling API';
+                $('#apiResponse').html('<div class="alert alert-danger">' + errorMessage + '</div>');
+            }
+        });
+    }
+</script>
+<script>
+    function loadDelete() {
+        var modal = document.getElementById('delete_modal');
+        var links = document.querySelectorAll('[data-bs-target="#delete_modal"]');
+        // Add event listener for when any of the links is clicked
+        links.forEach(function (link) {
+            link.addEventListener('click', function () {
+                var id = link.dataset.id;
+                document.getElementById('id').value = id;
+            });
+        });
+    }
+</script>
+@* <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get modal and link elements
+        var modal = document.getElementById('delete_modal');
+        var links = document.querySelectorAll('[data-bs-target="#delete_modal"]');
+        // Add event listener for when any of the links is clicked
+        links.forEach(function (link) {
+            link.addEventListener('click', function () {
+                var id = link.dataset.id;
+                document.getElementById('id').value = id;
+            });
+        });
+    });
+</script> *@
+<script>
+    function loadSuppliers() {
+        $.ajax({
+            url: 'http://localhost:5166/api/Suppliers',
+            type: 'GET',
+            success: function (response) {
+                var tableBody = $('#mytable tbody');
+                tableBody.empty(); // Clear existing rows
+                response.forEach(function (supplier) {
+                    var row = '<tr>' +
+                        '<td>' + supplier.supplierId + '</td>' +
+                        '<td><span class="limitedText">' + supplier.companyName + '</span></td>' +
+                        '<td class="text-center"><span class="limitedText">' + supplier.contactName + '</span></td>' +
+                        '<td class="text-center"><span class="limitedText">' + supplier.address + '</span></td>' +
+                        '<td class="text-end"><div class="actions">'+
+                        '<a class="btn btn-sm bg-success-light" data-bs-toggle="modal" data-id="' + supplier.supplierId + '" data-comp="' + supplier.companyName + '" data-contact="' + supplier.contactName + '" data-address="' + supplier.address + '" data-phone="' + supplier.phone + '" data-bs-target="#edit_modal" href="#edit_modal"><i class="fe fe-pencil" > </i> Edit</a><a data-bs-toggle="modal" data-bs-target="#delete_modal" href = "#delete_modal" data-id="' + supplier.supplierId + '" class="btn btn-sm bg-danger-light" ><i class="fe fe-trash" > </i> Delete</a>' +
+                        '</div></td>' +
+                        '</tr>';
+                    tableBody.append(row);
+                });
+                loadEdit();
+                loadDelete();
+            },
+            error: function (error) {
+                $('#apiResponse').html('<div class="alert alert-danger">Error calling API</div>');
+            }
+        });
+    }
+    loadSuppliers();
+</script>
